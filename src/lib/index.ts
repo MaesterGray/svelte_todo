@@ -1,9 +1,7 @@
-// place files you want to import through the `$lib` alias in this folder.
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 
-// Your web app's Firebase configuration
 export const firebaseConfig = {
   apiKey: "AIzaSyBNoZpl8cbZYl8Vr_zeNtwjlvw5PdB3-aY",
   authDomain: "svelte-todo-38b7c.firebaseapp.com",
@@ -14,3 +12,96 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase
+
+export type Task={
+  isComplete:boolean,
+  name:string,
+  index:number
+}
+
+// export type Project ={
+//   description:string,
+//   duedate?:EpochTimeStamp
+//   title:string
+//   tasks:Task[]
+//   isComplete:boolean
+// }
+
+export type User= {
+projects:Project[],
+signinMethod:{},
+uid:string
+firstname:string
+lastname:string
+id:string
+}
+
+
+export const app = initializeApp(firebaseConfig)
+export const db = getFirestore(app)
+
+export const auth = getAuth(app)
+
+class City {
+  name:string
+  state:string
+  country?:string
+  constructor (name:string, state:string, country:string ) {
+      this.name = name;
+      this.state = state;
+      this.country = country;
+  }
+  toString() {
+      return this.name + ', ' + this.state + ', ' + this.country;
+  }
+}
+
+// Firestore data converter
+export const cityConverter = {
+  toFirestore: (city:City) => {
+      return {
+          name: city.name,
+          state: city.state,
+          country: city.country
+          };
+  },
+  fromFirestore: (snapshot, options) => {
+      const data = snapshot.data(options);
+      return new City(data.name, data.state, data.country);
+  }
+};
+
+
+export class Project{
+  isComplete:boolean
+  tasks:Task[]
+  duedate?:string
+  description:string
+  title:string
+  reminder?:string
+constructor(isComplete:boolean,tasks:Task[],description:string,title:string,reminder?:string|undefined,duedate?:string){
+  this.isComplete=isComplete
+  this.tasks = tasks
+  this.duedate=duedate
+  this.description=description
+  this.title=title
+  if (reminder !== undefined) {
+    this.reminder= reminder
+  }
+  if (duedate !== undefined) {
+    this.reminder= reminder
+  }
+}
+
+toFirestore(){
+  return {
+    title:this.title,
+    description:this.description,
+    duedate:this.duedate,
+    isComplete:this.isComplete,
+    reminder: this.reminder,
+    tasks:this.tasks,
+    
+  }
+}
+}

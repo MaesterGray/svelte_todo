@@ -1,20 +1,25 @@
-import { getAuth,onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 import { redirect } from "@sveltejs/kit";
-const auth =getAuth()
-let userState = {
-    authsatate:false,
-    uid:''
+import { getFirestore } from "firebase/firestore";
+import { collection,  } from "firebase/firestore"; 
+import { firebaseConfig } from "$lib";
+import { app } from "$lib";
+import { auth } from "$lib";
+
+export async function load({}) {
+  let user = auth.currentUser;
+  if (user) {
+    
+  } else {
+    redirect(303, '/');
+  }
+
+  return { 
+    userUid:user.uid,
+    
+   };
 }
-export async function load({url}){
-onAuthStateChanged(auth,(user)=>{
-    if (user) {
-        userState={
-            authsatate:true,
-            uid:user.uid
-        }
-        return userState
-    }else{
-        throw redirect(303,`/login?redirectTo=${url.pathname}`)
-    }
-})
-}
+
+
+
