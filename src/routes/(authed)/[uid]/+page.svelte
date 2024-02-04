@@ -10,12 +10,29 @@ import { mutationOccured } from '$lib/stores.js';
 import type {ComponentEvents} from 'svelte'
 import type { LayoutData } from '../$types.js';
 import {deleteProject} from '$lib/mutations.js'
+import {onMount} from 'svelte'
   export let layout:LayoutData;
   export let data:PageData
 if ($mutationOccured) {
    invalidate('app:random') .then(()=>  mutationOccured.set(false))
 }
 
+onMount(()=>{
+        
+        setTimeout(()=>{
+            if ("Notification" in window&& Notification.permission==='default') {
+            Notification.requestPermission().then((permission)=>{
+                if (permission==='granted') {
+                    new Notification('Welcome to Daytask')
+                }else{
+                    toast('You will not be able to receive notifications when your projects and tasks have reached their due-date')
+                }
+            })
+        }else{
+
+        }
+        },4000)
+    }) 
 // function deleteOngoingProject(event:ComponentEvents<Ongoingproject>['delete']){
 //     updateDoc(dbref,{"projects.ongoing":arrayRemove(event.detail.project)}).then(()=>{
 //         toast.success('Project deleted')

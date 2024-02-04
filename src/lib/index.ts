@@ -1,7 +1,7 @@
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-
+import { getMessaging,getToken } from "firebase/messaging";
 export const firebaseConfig = {
   apiKey: "AIzaSyBNoZpl8cbZYl8Vr_zeNtwjlvw5PdB3-aY",
   authDomain: "svelte-todo-38b7c.firebaseapp.com",
@@ -105,3 +105,7 @@ toFirestore(){
   }
 }
 }
+
+// export const messaging = getMessaging(app)
+// const VAPIDKEY = 'BCBzutOBCTTC3CdWIOWHRZf5G9eq9gjbd_SXc9aFwaG2pnlwrGymhUKvaplA8T9qrVt8NwQZ6kZXBK4FNK9D-jo'
+// getToken(messaging,{vapidKey:VAPIDKEY})

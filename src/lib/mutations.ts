@@ -31,7 +31,7 @@ export function handleUpdate(project,copyProject,useruid){
             }
         }else{
             let mutation1= deleteDoc(doc(db,'users',useruid,'completed',project.title))
-            let mutation2= setDoc(doc(db,'users',useruid,'ongoing',project.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore)
+            let mutation2= setDoc(doc(db,'users',useruid,'ongoing',project.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore())
 
             toast.promise(Promise.all([mutation1,mutation2]).then(()=>{
                 invalidate('app:home')
@@ -57,8 +57,8 @@ export function handleUpdate(project,copyProject,useruid){
         }else{
             if (project.title!== copyProject.title) {
                 let mutation1= deleteDoc(doc(db,'users',useruid,'ongoing',project.title))
-                let mutation2= setDoc(doc(db,'users',useruid,'ongoing',copyProject.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore)
-
+                let mutation2= setDoc(doc(db,'users',useruid,'ongoing',copyProject.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore())
+                console.log('module 1')
             toast.promise(Promise.all([mutation1,mutation2]).then(()=>{
                 invalidate('app:home')
             }),{
@@ -67,7 +67,8 @@ export function handleUpdate(project,copyProject,useruid){
                 error:'Something went wrong'
             })
             }else{
-                toast.promise(setDoc(doc(db,'users',useruid,'ongoing',copyProject.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore).then(()=>{
+                console.log('module 2')
+                toast.promise(setDoc(doc(db,'users',useruid,'ongoing',copyProject.title),new Project(false,copyProject.tasks,copyProject.description,copyProject.title,copyProject.reminder,copyProject.duedate).toFirestore()).then(()=>{
                     invalidate('app:home')
                 }),{
                     loading:'loading',
@@ -83,7 +84,7 @@ export function handleUpdate(project,copyProject,useruid){
 export function deleteProject(type:'ongoing'|'completed',useruid:string,title:string){
     if (type==='completed') {
       toast.promise(deleteDoc(doc(db,'users',useruid,'completed',title)).then(()=>{invalidate('app:home')}),{
-        success:'Project deleted',
+        success:'Project deleted succesfully',
         loading:'loading',
         error:'Action failed, try again later'
       })  

@@ -11,29 +11,28 @@ export async function load({ params, depends }) {
   depends("app:home");
   let completed: DocumentData[] = [];
   let ongoing: DocumentData[] = [];
+  let returnObject:{
+    ongoing:DocumentData[],
+    completed:DocumentData[]}={
+    ongoing:[],
+    completed:[]
+  }
   let completedColRef = collection(db, "users", params.uid, "completed");
   let ongoingColRef = collection(db, "users", params.uid, "ongoing");
-  let completedProjects = await getDocs(completedColRef);
-  let ongoingProjects = await getDocs(ongoingColRef);
-  let returnObject = await Promise.all([
+  let completedProjects =  getDocs(completedColRef);
+  let ongoingProjects =  getDocs(ongoingColRef);
+  let someRandomValue= await Promise.all([
     completedProjects,
     ongoingProjects,
-  ]).then((values) => {
-    let tempArray = [];
-    values[1].forEach((doc) => {
-      ongoing.push(doc.data());
-    });
-    
-    values[0].forEach((doc) => {
-      console.log(doc.data());
-        completed = doc.data()
-    });
+  ])
 
-    return {
-      completed: completed,
-      ongoing: ongoing,
-    };
-  });
+  try {
+
+    someRandomValue[1].forEach((doc)=> returnObject.ongoing.push(doc.data()))
+  } catch (error) {
+    console.error(error)
+  }
+
   return {
     returnObject: returnObject,
   };

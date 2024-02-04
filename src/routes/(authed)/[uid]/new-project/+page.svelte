@@ -6,12 +6,10 @@
     import { db } from '$lib';
     import {invalidate} from '$app/navigation'
     import { setDoc,doc,getDocs,collection,arrayUnion,updateDoc,addDoc } from 'firebase/firestore';
-    import { mutationOccured } from '$lib/stores.js';
     import { goto } from '$app/navigation';
     import toast, { Toaster } from 'svelte-french-toast';
     import { Project } from '$lib';
     import { page } from '$app/stores';
-    import Circleprogress from '$lib/components/circleprogress.svelte';
     import{ dateFormatter} from '$lib/utils'
     export let data: PageData;
     let title =''
@@ -73,7 +71,7 @@
   
         <label class="  flex flex-col text-white" for="reminder">
             Set a reminder
-            <input type='datetime-local'  class="bg-slate-600 resize-none outline-none p-2 font-light" name="reminder" bind:value={reminder} min={`${dateFormatter(year,month,day)}T${presenthour}:${presentMinute}`} />
+            <input type='date'  class="bg-slate-600 resize-none outline-none p-2 font-light" name="reminder" bind:value={reminder} min={`${dateFormatter(year,month,day)}T${presenthour}:${presentMinute}`} />
         </label>
         <button class="  border border-black bg-orange-300" on:click={()=>{tasks = [...tasks,{isComplete:false,name:'',index:tasks.length}]}}>Add Task</button>
             <div>
