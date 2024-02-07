@@ -106,6 +106,6 @@ toFirestore(){
 }
 }
 
-// export const messaging = getMessaging(app)
-// const VAPIDKEY = 'BCBzutOBCTTC3CdWIOWHRZf5G9eq9gjbd_SXc9aFwaG2pnlwrGymhUKvaplA8T9qrVt8NwQZ6kZXBK4FNK9D-jo'
-// getToken(messaging,{vapidKey:VAPIDKEY})
+export const messaging = getMessaging(app)
+ const VAPIDKEY = 'BCBzutOBCTTC3CdWIOWHRZf5G9eq9gjbd_SXc9aFwaG2pnlwrGymhUKvaplA8T9qrVt8NwQZ6kZXBK4FNK9D-jo'
+ getToken(messaging,{vapidKey:VAPIDKEY})
