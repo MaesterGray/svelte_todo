@@ -11,6 +11,7 @@ import type {ComponentEvents} from 'svelte'
 import type { LayoutData } from '../$types.js';
 import {deleteProject} from '$lib/mutations.js'
 import {onMount} from 'svelte'
+import { token } from '$lib';
   export let layout:LayoutData;
   export let data:PageData
 if ($mutationOccured) {
@@ -18,7 +19,11 @@ if ($mutationOccured) {
 }
 
 onMount(()=>{
-        
+        token.then((customtoken)=>{
+            if(customtoken){
+                console.log(customtoken)
+            }
+        })
         setTimeout(()=>{
             if ("Notification" in window&& Notification.permission==='default') {
             Notification.requestPermission().then((permission)=>{
@@ -29,7 +34,7 @@ onMount(()=>{
                 }
             })
         }else{
-            
+
         }
         },4000)
     }) 
