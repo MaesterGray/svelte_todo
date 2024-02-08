@@ -11,20 +11,17 @@ import type {ComponentEvents} from 'svelte'
 import type { LayoutData } from '../$types.js';
 import {deleteProject} from '$lib/mutations.js'
 import {onMount} from 'svelte'
-import { token } from '$lib';
+import { getToken,getMessaging } from 'firebase/messaging';
+  import { app } from '$lib';
   export let layout:LayoutData;
   export let data:PageData
-if ($mutationOccured) {
-   invalidate('app:random') .then(()=>  mutationOccured.set(false))
-}
+
 
 onMount(()=>{
-        token.then((customtoken)=>{
-            if(customtoken){
-                console.log(customtoken)
-            }
-        })
+       
         setTimeout(()=>{
+        const message = getMessaging(app)
+            getToken(message,{vapidKey:'BCBzutOBCTTC3CdWIOWHRZf5G9eq9gjbd_SXc9aFwaG2pnlwrGymhUKvaplA8T9qrVt8NwQZ6kZXBK4FNK9D-jo'})
             if ("Notification" in window&& Notification.permission==='default') {
             Notification.requestPermission().then((permission)=>{
                 if (permission==='granted') {
@@ -38,29 +35,6 @@ onMount(()=>{
         }
         },4000)
     }) 
-// function deleteOngoingProject(event:ComponentEvents<Ongoingproject>['delete']){
-//     updateDoc(dbref,{"projects.ongoing":arrayRemove(event.detail.project)}).then(()=>{
-//         toast.success('Project deleted')
-//         invalidate('app:random')
-//     }).catch((err)=>{
-//         toast.error('Action failed')
-//     })
-// }
-
-// function deleteCompletedProject (event:ComponentEvents<Completedtask>['delete']){
-//      let copyArray:[] = layout.userDb.projects.completed
-
-//    copyArray = copyArray.filter((project)=>{
-//        return project.title !== event.detail.project.title
-//      })
-//     updateDoc(dbref,{"projects.completed":copyArray}).then(()=>{
-//         toast.success('Project deleted')
-//         invalidate('app:random').then(()=>{
-//         })
-//     }).catch((err)=>{
-//         toast.error('Action failed')
-//     })
-// }
 </script>
 
 <div transition:fade class=" w-screen h-[92vh] bg-gray-800 flex flex-col items-center space-y-2 pt-3 overflow-y-scroll pb-3">
