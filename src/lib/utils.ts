@@ -1,5 +1,4 @@
 import type { Task } from "$lib";
-import { Project } from "$lib";
 export function progressCalc(tasks: Task[]): number {
   let completedTasks = tasks.filter((task) => {
     return task.isComplete === true;

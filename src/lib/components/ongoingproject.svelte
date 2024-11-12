@@ -3,7 +3,7 @@
     import Icon from '@iconify/svelte';
     import { progressCalc } from "$lib/utils";
     import {createEventDispatcher} from 'svelte'
-    import Circleprogress from "./circleprogress.svelte";
+    import Circleprogress from "./Circleprogress.svelte";
 
     export let title:string;
     export let tasks:Task[]

@@ -1,9 +1,7 @@
 <script lang="ts">
     import Icon from '@iconify/svelte'; 
-    export let active:boolean;
-    export let type:string;
-    export let route:string
-
+     
+    let {active,type,route}:{active:boolean,type:string,route:string}=$props()
  </script>
 
  

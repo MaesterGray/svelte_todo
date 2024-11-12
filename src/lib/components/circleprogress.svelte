@@ -1,10 +1,9 @@
 <script lang="ts">
-    export let percentage:number;
-    export let variant:'ongoingproject'|'projectpage'
   
+    let {percentage,variant}:{percentage:number,variant:'ongoingproject'|'projectpage'}=$props()
     let circumfrence=125.68
   let offset:number ;
-    $:{ offset =  circumfrence * ((100-percentage)/100)}
+     offset =  circumfrence * ((100-percentage)/100)
   
 </script>
 {#key percentage}
