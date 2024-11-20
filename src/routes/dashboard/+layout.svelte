@@ -1,9 +1,7 @@
 <script lang="ts">
     import Navigationbutton from '$lib/components/Navigationbutton.svelte';
     import {page} from '$app/stores'
-   // export let data;
-    
-    
+    import Toast from '$lib/components/ToastContainer.svelte';
     const navInfo =[
         {
             route:'/dashboard',
@@ -16,13 +14,12 @@
             active:$page.url.pathname === `/dashboard/new-project`
         },
         {
-            route:`/dashboard/schedule`,
+            route:`/dashboard`,
             type:'schedule',
             active:$page.url.pathname === `/dashboard/schedule`
         }
     ]
 
-    //console.log($page.url.pathname)
     </script>
     
     <slot/>
@@ -31,3 +28,4 @@
         <Navigationbutton route={route} type={type} active={active}/>
        {/each}
     </div>
+    <Toast/>

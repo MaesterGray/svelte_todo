@@ -1,16 +1,24 @@
 import {
     getDocs,
-    doc,
     collection,
+    
   } from "firebase/firestore";
   import { db } from "$lib/firebaseconfig";
   
-  export async function load({ params, depends ,locals}) {
-    console.log({user:locals.userId})
+  import type { Project } from "$lib";
+  export async function load({  depends ,locals}) {
     depends("app:home");
     let returnObject={
       ongoing:[],
-      completed:[]
+      completed:[],
+      userId:locals.userId,
+      profilePic:locals.profilePic
+
+    } as {
+      ongoing:{id:string,data:Project}[]
+      completed:{id:string,data:Project}[]
+      userId:string
+      profilePic:string
     }
     let completedColRef = collection(db, "users", locals.userId, "completed");
     let ongoingColRef = collection(db, "users", locals.userId, "ongoing");
@@ -22,9 +30,8 @@ import {
     ])
   
     try {
-  
-      someRandomValue[1].forEach((doc)=> returnObject.ongoing.push({id:doc.id,
-        ...doc.data()}))
+      someRandomValue[0].forEach((doc)=> returnObject.completed.push({id:doc.id,data:doc.data()}))
+      someRandomValue[1].forEach((doc)=> returnObject.ongoing.push({id:doc.id,data:doc.data()}))
     } catch (error) {
       console.error(error)
     }

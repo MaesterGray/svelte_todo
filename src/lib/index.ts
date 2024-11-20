@@ -6,7 +6,7 @@ export type Task={
   
   export type Project ={
     description:string,
-    duedate:string
+    dueDate:string
     title:string
     tasks:Task[]
   }

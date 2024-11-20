@@ -2,9 +2,11 @@
   
     let {percentage,variant}:{percentage:number,variant:'ongoingproject'|'projectpage'}=$props()
     let circumfrence=125.68
-  let offset:number ;
-     offset =  circumfrence * ((100-percentage)/100)
-  
+    let offset = $state(0)
+    $effect(()=>{
+        offset =  circumfrence * ((100-percentage)/100)
+    })
+ 
 </script>
 {#key percentage}
 <div class=" text-center "

@@ -1,8 +1,8 @@
-// import type { PageServerLoad } from './$types';
 import {doc,addDoc,collection} from 'firebase/firestore'
+import { invalidate } from '$app/navigation'
 import { db } from '$lib/firebaseconfig.js'
-import { redirect } from '@sveltejs/kit'
-
+import { fail, redirect } from '@sveltejs/kit'
+import type { Action } from '@sveltejs/kit'
 
 export const actions ={
 	createProject:async({locals,request})=>{
@@ -13,12 +13,15 @@ export const actions ={
 			tasks.push({name:formdata[`${index}`],done:false})
 		}
 		const colRef = collection(db,'users',locals.userId,'ongoing')
-    await addDoc(colRef,{title,description:formdata.description,dueDate:formdata['due-date'],tasks})    
+   	let result= await addDoc(colRef,{title,description:formdata.description,dueDate:formdata['due-date'],tasks}) 
+	let newProjectId;
     try{
-		
-		redirect(300,'/')
+		newProjectId = result.id
      }catch(err){
-         console.error(err)
+		const errorMessage = (err as Error).message;
+		console.error(err)
+		return fail(400,{createProjectError:errorMessage})
      }
+	return redirect(301,`/dashboard/project/ongoing/${newProjectId}`)
    }
 	}

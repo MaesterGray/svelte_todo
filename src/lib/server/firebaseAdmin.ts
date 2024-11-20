@@ -15,6 +15,6 @@ try {
 	if (!/already exists/u.test(err.message)) {
 		console.error('Firebase Admin Error: ', err.stack);
 	}
-}
 
-export const adminAuth = getAuth();
+}
+export const adminAuth = getAuth()

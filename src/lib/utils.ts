@@ -1,5 +1,8 @@
-import type { Task } from "$lib";
+import type { Task,Project } from "$lib";
 export function progressCalc(tasks: Task[]): number {
+  if(tasks.length===0){
+    return 0
+  }
   let completedTasks = tasks.filter((task) => {
     return task.isComplete === true;
   });
@@ -18,7 +21,7 @@ export function dateFormatter(
     return `${Year}-${month}-${dayOfTheMonth}`;
   }
 }
-function arrayEquality(tasks: [], copytasks: []) {
+export function arrayEquality(tasks: Task[], copytasks: Task[]) {
   if (tasks.length !== copytasks.length) {
     return false;
   } else {
@@ -32,17 +35,16 @@ function arrayEquality(tasks: [], copytasks: []) {
         index = tasks.length;
       }
     }
-    console.log(areEqual, "are equal");
     return areEqual;
   }
 }
 
-export function hasBeenEdited(project: {}, copyproject: {}) {
+export function hasBeenEdited(project: Project, copyproject: Project) {
   if (
     project.description !== copyproject.description ||
     project.title !== copyproject.title ||
     arrayEquality(project.tasks, copyproject.tasks) === false ||
-    project.duedate !== copyproject.duedate
+    project.dueDate !== copyproject.dueDate
   ) {
 
     return true;
@@ -51,6 +53,14 @@ export function hasBeenEdited(project: {}, copyproject: {}) {
   }
 }
 
-export function requestPermission(){
-  
+
+export function projectIsComplete(tasks:Task[]){
+    let result = true
+  for (let index = 0; index < tasks.length; index++) {
+          if (tasks[index].isComplete===false) {
+              result = false
+              index = tasks.length
+          }
+  }
+  return result
 }
