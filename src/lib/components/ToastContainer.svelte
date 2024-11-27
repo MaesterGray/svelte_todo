@@ -12,10 +12,10 @@
     style:visibility={$Toast ? 'visible' : 'hidden'}
   >
   {#if $Toast?.dismissible}
-  <button class=" justify-end">x</button>
+  <button class=" self-end" onclick={()=>Toast.close()}>x</button>
     
   {/if}
-  <span class=" flex items-center space-x-2">
+  <span class=" flex items-center space-x-2 w-full">
     {#if $Toast?.type==='failure'}
     <Icon icon="material-symbols:cancel" class=' text-red-600'/>
     {:else if $Toast?.type==='loading'}
@@ -30,10 +30,5 @@
     
     
   </div>
-  <style>
-    /* Ensure the toast doesn't affect the layout */
-    .toast {
-      pointer-events: none; /* Toast won't interfere with user interaction */
-    }
-  </style>
+    
   

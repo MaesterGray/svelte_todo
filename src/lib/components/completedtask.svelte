@@ -1,7 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte';
     import deleteProject from "$lib/mutations/deleteProject";
-    // import { toastOpen } from '$lib/stores';
     import { Toast } from '$lib/stores';
     let {position,title,route,userId,projectId}:{position:number,title:string,route:string,userId:string,projectId:string} = $props()   
     

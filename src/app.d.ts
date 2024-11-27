@@ -5,7 +5,7 @@ declare global {
 		// interface Error {}
 		 interface Locals {
 			userId:string
-			profilePic:string
+			profilePic?:string
 		 }
 		// interface PageData {}
 		// interface PageState {}

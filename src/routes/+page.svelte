@@ -4,7 +4,8 @@
     import {signInWithPopup,GoogleAuthProvider} from 'firebase/auth'
     import {auth} from '$lib/firebaseconfig'
     import { goto } from '$app/navigation';
-
+	import { Toast } from '$lib/stores';
+	
     const provider = new GoogleAuthProvider()
 
     async function signInWithGoogle(){
@@ -21,6 +22,13 @@
 			});
 			if (!response.ok) {
 				const errorResponse = await response.json();
+				Toast.open({
+					id:Math.random()* 1000,
+					dismissible:true,
+					timeout:3000,
+					message:errorResponse.message,
+					type:'success'
+				})
 				return;
 			}
 			
@@ -38,7 +46,7 @@
     
     <section class=" h-[90%] w-[90%] flex flex-col space-y-2 items-center">
     <h1 class=" text-white font-bold text-2xl text-center">Welcome to Day Task</h1>
-    <img class=" lg:w-[35%] aspect-square rounded-md" src="/workingman.jpeg" alt='picture'/>    
+    <img class=" lg:w-[35%] aspect-square rounded-md" src="/workingman.jpeg" alt='Onboarding '/>    
     <button class=" flex space-x-1  items-center p-2 bg-orange-300 rounded-md" onclick={signInWithGoogle}>
         <span class=" text-lg font-bold ">Continue with Google </span>
         <Icon icon="flat-color-icons:google" /></button>

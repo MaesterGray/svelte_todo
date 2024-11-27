@@ -1,31 +1,30 @@
 <script lang="ts">
     import Navigationbutton from '$lib/components/Navigationbutton.svelte';
     import {page} from '$app/stores'
-    import Toast from '$lib/components/ToastContainer.svelte';
+    console.log($page.url.pathname)
     const navInfo =[
         {
             route:'/dashboard',
             type:'home',
-            active:$page.url.pathname === '/dashboard'
+            active:$page.url.pathname 
         },
         {
             route:`/dashboard/new-project`,
             type:'add',
-            active:$page.url.pathname === `/dashboard/new-project`
+            active:$page.url.pathname 
         },
         {
             route:`/dashboard`,
             type:'schedule',
-            active:$page.url.pathname === `/dashboard/schedule`
+            active:$page.url.pathname 
         }
     ]
 
     </script>
     
     <slot/>
-    <div class="  fixed bottom-0 bg-gray-800 w-screen h-[8vh] shadow-md border-t flex justify-around items-center z-10">
+    <div class="  fixed bottom-0 bg-gray-800 w-screen h-[8vh] shadow shadow-black  flex justify-around items-center z-10">
        {#each navInfo as {route,type,active}}
         <Navigationbutton route={route} type={type} active={active}/>
        {/each}
     </div>
-    <Toast/>

@@ -18,7 +18,7 @@ const {subscribe,set,update} =  writable<ToastOptions|null>(toast)
         }
     }
     function close() {
-       update((toast)=>(toast=null)) 
+       update((state)=>(state=null)) 
     }
 
     return{
@@ -31,5 +31,4 @@ const {subscribe,set,update} =  writable<ToastOptions|null>(toast)
 
 export const Toast = toastStore(null)
 
-export const toasts = writable([]);
 

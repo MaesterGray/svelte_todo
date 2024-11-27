@@ -5,7 +5,6 @@
     import { Toast ,} from '$lib/stores';
     import{ dateFormatter} from '$lib/utils'
 	import { enhance } from '$app/forms';
-	import ToastConainer from '$lib/components/ToastContainer.svelte';
     let title =$state('')
     let description =$state('')
     let tasks:Task[]=$state([])
@@ -30,17 +29,15 @@
         })
     }
    })
-    //for creating a modal
 </script>
 
 
-<div class=" w-screen h-[92vh] flex flex-col items-center space-y-2 bg-gray-800 py-5">
-    <h1 class=" w-[90%] text-center text-white font-Inter leading-7">
-       <button class=" " onclick={()=>history.back()}> <Icon icon="material-symbols-light:arrow-back" /></button>
+<div class=" w-screen  flex flex-col items-center space-y-2 bg-gray-800 pt-5 pb-20 overflow-y-scroll">
+    <h1 class=" w-[90%]  text-white font-Inter leading-7 flex items-center justify-center font-bold text-3xl">
         Create New Project
     </h1>
 
-    <form class=" flex flex-col space-y-6 font-Inter leading-7 font-semibold w-[90%] h-screen justify-between" 
+    <form class=" flex flex-col  font-Inter leading-7 font-semibold w-[90%] " 
     use:enhance={()=>{
         isCreating = true
         return async({update})=>{
@@ -53,34 +50,39 @@
 
         <label class="  flex flex-col text-white " for="title" >
             Project Title
-            <input class="bg-slate-600 outline-none p-2 font-light " name="title" bind:value={title}/>
+            <input class="bg-slate-600 outline-none p-2 " name="title" bind:value={title}/>
         </label>
         
         <label class="  flex flex-col text-white" for="description">
             Project Description
-            <textarea class="bg-slate-600 resize-none outline-none p-2 font-light" name="description" bind:value={description}></textarea>
+            <textarea class="bg-slate-600 resize-none outline-none p-2 " name="description" bind:value={description}></textarea>
         </label>
 
         <label class="  flex flex-col text-white" for="due-date">
             Due Date
-            <input type="date" class="bg-slate-600 resize-none outline-none p-2 font-light" name="due-date" bind:value={duedate} min={dateFormatter(year,month,day)} />
+            <input type="date" class="bg-slate-600 resize-none outline-none p-2 " name="due-date" bind:value={duedate} min={dateFormatter(year,month,day)} />
         </label>
-  
+            <h3 class=" text-white font-bold text-xl">Tasks</h3>
        <input type="hidden" name='numberOfTasks' bind:value={tasks.length}>
-	   {#each tasks as {index,name}(index)}
-                <div class=" relative w-full h-[5vh] mb-11 flex flex-col space-y-3"
-                animate:flip={{duration:200}}>
-                    <input required type="text" name={`${index}`} class=" w-full  bg-slate-600 p-2 outline-none text-white font-light" bind:value={tasks[index].name}/>
-                    <div class=" absolute top-20 right-10 text-white bg-opacity-25 flex space-x-2 flex-row-reverse">
-                        <button onclick={()=>tasks=tasks.filter((task)=>(task.index!==index))} class=" h-[40px] w-[40px] rounded-full flex items-center justify-center bg-slate-900"><Icon icon="ic:baseline-delete" /></button>
-                    </div>
-                </div>
-            {/each}
-        <button class="  border border-black bg-orange-300" onclick={()=>{tasks = [...tasks,{isComplete:false,name:'',index:tasks.length}]}}>Add Task</button>
+       <div class=" flex flex-col space-y-5">
+        {#each tasks as {index,name}(index)}
+        <div class=" relative" animate:flip={{duration:200}}>
+            <input required type="text" name={`${index}`} class=" w-full  bg-slate-600 p-2 outline-none text-white " bind:value={tasks[index].name}/>
+                <button onclick={()=>tasks=tasks.filter((task)=>(task.index!==index))} class=" h-[40px] w-[40px] rounded-full flex items-center justify-center bg-slate-900 absolute -bottom-9 right-10 text-white z-10 mb-5">
+                    <Icon icon="ic:baseline-delete" />
+                </button>
+        </div>
+    {/each}
+    <button class="  border border-black bg-orange-300" onclick={()=>{tasks = [...tasks,{isComplete:false,name:'',index:tasks.length}]}}>
+        Add Task
+    </button>
+
+       </div>
+	   
             
 
 			{#if tasks.length!=0 && description!=='' && title!=='' && duedate!== ''}
-            <button class=" bg-orange-300 text-center " type="submit">
+            <button class=" bg-orange-300 text-center mt-5" type="submit">
                 {isCreating?'...Creating project':'  Create Project'}            
             </button>
 

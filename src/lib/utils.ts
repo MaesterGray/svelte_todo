@@ -21,30 +21,29 @@ export function dateFormatter(
     return `${Year}-${month}-${dayOfTheMonth}`;
   }
 }
-export function arrayEquality(tasks: Task[], copytasks: Task[]) {
-  if (tasks.length !== copytasks.length) {
-    return false;
-  } else {
-    let areEqual = true;
-    for (let index = 0; index < tasks.length; index++) {
-      if (
-        tasks[index].name !== copytasks[index].name ||
-        tasks[index].isComplete !== copytasks[index].isComplete
-      ) {
-        areEqual = false;
-        index = tasks.length;
-      }
-    }
-    return areEqual;
+export function arrayEquality(project: Project, copyProject: Project): boolean {
+  if (project.tasks.length !== copyProject.tasks.length) {
+    return false; 
   }
+
+  for (let index = 0; index < project.tasks.length; index++) {
+    console.log(index)
+    if (
+      project.tasks[index].name !== copyProject.tasks[index].name ||
+      project.tasks[index].isComplete !== copyProject.tasks[index].isComplete
+    ) {
+      return false; 
+    }
+  }
+
+  return true; 
 }
 
 export function hasBeenEdited(project: Project, copyproject: Project) {
   if (
     project.description !== copyproject.description ||
     project.title !== copyproject.title ||
-    arrayEquality(project.tasks, copyproject.tasks) === false ||
-    project.dueDate !== copyproject.dueDate
+    project.dueDate !== copyproject.dueDate 
   ) {
 
     return true;

@@ -6,34 +6,49 @@
     import Ongoingproject from '$lib/components/ongoingproject.svelte';
     import { signOut } from 'firebase/auth';
     import { auth } from '$lib/firebaseconfig';
+    import { Toast } from '$lib/stores';
+    import { goto } from '$app/navigation';
     let {data} = $props()
-
+    let isSigningOut = $state(false)
     async function handleSignOut() {
+        isSigningOut = true
       await  fetch('/',{
             method:'delete'
         })
         try {
-            signOut(auth)
+         await  signOut(auth)
+         goto('/',{replaceState:true})
         } catch (error) {
-           //pop toast 
+           Toast.open({
+            dismissible:true,
+            id:Math.random()* 1000,
+            type:'failure',
+            message:'Signout operation failed try again later'
+           })
         }
     }
 </script>
 
-<div transition:fade class=" w-screen h-[92vh] bg-gray-800 flex flex-col items-center space-y-2 pt-3 overflow-y-scroll pb-3">
+<div transition:fade class=" w-screen h- bg-gray-800 flex flex-col items-center space-y-2 pt-3  pb-3">
 
-    <h1 class=" w-[90%] flex  h-[8vh] items-center justify-between">
-
-        <div class=" flex flex-col">
-            <small class=" text-orange-300">{'Welcome '}</small>
-        </div>
+    <section class=" w-[90%] flex  h-[8vh] items-center justify-between">
+        <p class=" text-white font-bold text-3xl">Welcome</p>
+        <div class=" justify-center items-center flex space-x-3">
+        <button class=" rounded-md font-bold p-3 hover:bg-red-500 hover:text-white bg-gray-900 shadow-md text-orange-400 active:bg-red-500 active:text-white" onclick={handleSignOut}>
+             {isSigningOut?'..Signing Out':'Sign Out'}
+        </button>
         
+        {#if data.returnObject.profilePic}
         <div  class=" w-[7vh] h-[7vh] rounded-md">
             <img src={data.returnObject.profilePic} class=" object-fill rounded-full w-full h-full" alt=""/>
         </div>
 
-        <button class=" rounded-md font-bold p-3 hover:bg-red-500 hover:text-white bg-gray-900 shadow-md text-orange-400 active:bg-red-500 active:text-white"> Sign out</button>
-    </h1>
+        {/if}
+        
+        </div>
+        
+
+    </section>
 
     <div class=" flex space-x-2 w-[90%]">
         <input class=" w-[90%] bg-slate-600 text-slate-500" type="search"  placeholder="Search tasks"/>
@@ -42,7 +57,7 @@
 
     <div class=" flex flex-col space-y-3 w-[90%] flex-shrink-0">
         <h1 class=" w-full text-start text-white font-semibold">Completed Projects</h1>
-        <div class=" h-[20vh] overflow-x-scroll flex space-x-3 w-[90vw] text-white font-semibold text-xl items-center ">
+        <div class=" h-[20vh]  flex space-x-3 w-[90vw] text-white font-semibold text-xl items-center ">
                 {#if data.returnObject.completed.length>0}
                 {#each data?.returnObject?.completed as project,i}
                     <Completedtask userId={data.returnObject.userId} projectId={project.id}  title={project.data.title} route={`/dashboard/project/completed/${project.id}`} position={i}/>

@@ -1,11 +1,11 @@
 <script lang='ts'>
     let {variant,project,userId,projectId}:{variant:'completed'|'ongoing',project:Project,userId:string,projectId:string}= $props()
-    import { toastOpen } from "$lib/stores";
+    import { Toast } from "$lib/stores";
     import Icon from "@iconify/svelte";
      import { progressCalc } from "$lib/utils";
      import Circleprogress from "./circleprogress.svelte";
     import { dateFormatter } from "$lib/utils";
-    import { hasBeenEdited } from "$lib/utils";
+    import { hasBeenEdited,arrayEquality } from "$lib/utils";
     import type {Project} from "$lib"
     import updateProject from "$lib/mutations/updateProject";
     import { projectIsComplete } from "$lib/utils";
@@ -17,6 +17,7 @@
         title:''
     })
     copyProject = project
+    console.log(project )
     let isBeingUpdated = $state(false)
 
 
@@ -25,32 +26,66 @@
     }
 
    async function handleUpdate(){
+    let invalidTaskErrMessage = 'All tasks should have names'
+   
+   try{
+    for (let index = 0; index < copyProject.tasks.length; index++) {
+        const element = copyProject.tasks[index];
+        if (element.name==='') {
+            throw new Error(invalidTaskErrMessage)
+        }
+    }
     isBeingUpdated = true
     let isComplete = projectIsComplete(copyProject.tasks)
    await updateProject(userId,projectId,variant,isComplete,copyProject)
-   try{
-    editmode=false
-    toastOpen.set({
-        type:'success',
-        message:'Project updates successfully',
-        open:true
-    })
    }catch(err){
-        console.error(err)
-   }
+    console.log(err)
+    
+    if (err.message===invalidTaskErrMessage) {
+        Toast.open({
+        dismissible:true,
+        message:'All tasks must have names',
+        type:'failure',
+        id:Math.random()*1000
+    })
+
+    }else{
+        Toast.open({
+        dismissible:true,
+        timeout:3000,
+        message:'Update operation failed',
+        type:'failure',
+        id:Math.random()*1000
+    })
+    }
+    
+}
    }
     let date = new Date()
    let year = date.getFullYear()
    let month = date.getMonth()+1
    let day = date.getDate()
  
-    let hasbeenedited = $state(false)
-    // let projectIsComplete = $state(false)
-    $effect(()=>{
-        hasbeenedited=hasBeenEdited(project,copyProject)
-        console.log(hasbeenedited)
-    })
-    //$inspect(hasbeenedited)
+
+    let hasbeenedited = $derived.by(()=>{
+        let completionEquality = true;
+        if (copyProject.tasks.length === project.tasks.length) {
+            for (let index = 0; index < project.tasks.length; index++) {
+                console.log(index)
+                if(project.tasks[index].isComplete !== copyProject.tasks[index].isComplete){
+                    console.log(project.tasks[index].isComplete,copyProject.tasks[index].isComplete)
+                    completionEquality = false
+                    index = project.tasks.length
+                }
+        }
+        }
+        console.log(completionEquality)
+        
+       return hasBeenEdited(project,copyProject)|| project.tasks.length !== copyProject.tasks.length || !completionEquality
+    }
+    )
+    $inspect(hasbeenedited)
+    
 </script>
 
 <div class="  bg-gray-800 w-screen h-[92vh] flex flex-col overflow-y-scroll  space-y-3 items-center py-5">
@@ -124,14 +159,15 @@
                     <button onclick={()=>copyProject.tasks=copyProject.tasks.filter((presentTask)=>(presentTask.name!==task.name))} class=" h-[40px] w-[40px] rounded-full flex items-center justify-center bg-slate-900">
                         <Icon icon="ic:baseline-delete" />
                     </button>
-                   <button onclick={()=>{copyProject.tasks =[...copyProject.tasks,{isComplete:false,name:'',index:copyProject.tasks.length}]}} class=" h-[40px] w-[40px] rounded-full flex items-center justify-center bg-slate-900">
+                   <button onclick={()=>{copyProject.tasks.push({name:'',isComplete:false,index:copyProject.tasks.length})}}  class=" h-[40px] w-[40px] rounded-full flex items-center justify-center bg-slate-900">
                     <Icon icon="basil:add-solid" />
                 </button> 
                </div>
             </div>
         {/each}
     </div>
-    <button onclick={()=>{copyProject={...copyProject,tasks:[...copyProject.tasks,{name:'',isComplete:false,index:copyProject.tasks.length}]}}} class=" bg-orange-300 p-2" class:hidden={editmode===false}>
+    <button onclick={()=>{copyProject.tasks.push({name:'',isComplete:false,index:copyProject.tasks.length})}}
+         class=" bg-orange-300 p-2" class:hidden={editmode===false}>
         Add new task
     </button> 
 </div>
